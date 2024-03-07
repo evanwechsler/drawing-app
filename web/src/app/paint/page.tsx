@@ -1,13 +1,16 @@
 "use client";
 
-import CanvasWrapper from "@/components/art-board";
-import DrawingCanvas from "@/components/drawing-canvas";
 import { Button } from "@/components/ui/button";
 import { usePaintingSettings } from "@/contexts/painting-settings-context";
 import { ArrowBigLeft } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import useMeasure from "react-use-measure";
+
+const ArtBoard = dynamic(() => import("@/components/art-board"), {
+  ssr: false,
+});
 
 export default function Page() {
   const { selectedCanvas, setSelectedCanvas } = usePaintingSettings();
@@ -35,8 +38,7 @@ export default function Page() {
         </Button>
         <p>Selected Canvas: {selectedCanvas}</p>
       </div>
-      <CanvasWrapper>test</CanvasWrapper>
-      {/* <DrawingCanvas /> */}
+      <ArtBoard />
     </div>
   );
 }

@@ -1,12 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { fabric } from "fabric";
-import useMeasure from "react-use-measure";
 import { usePaintingSettings } from "@/contexts/painting-settings-context";
 import { BRUSHES, CANVASES } from "@/lib/constants";
-import { Button } from "@/components/ui/button";
-import { Redo, Undo } from "lucide-react";
 import { HexCode } from "@/lib/colors";
 import { BrushName } from "@/types/painting-settings";
 import chroma from "chroma-js";
@@ -118,8 +115,6 @@ const DrawingCanvas = ({
         this.lastPosX = event.offsetX;
         this.lastPosY = event.offsetY;
 
-        console.log({ x: event.offsetX, y: event.offsetY });
-        console.log(this);
         setLastCenterPoint({ x: event.offsetX, y: event.offsetY });
         setLastZoom(zoom);
         setLastViewportTransform(this.viewportTransform ?? [1, 0, 0, 1, 0, 0]);
@@ -165,15 +160,11 @@ const DrawingCanvas = ({
 
     newDrawingCanvas.on("path:created", function (options: fabric.IEvent) {
       const path = (options as object as { path: fabric.Path }).path;
-      console.log(path);
       addStroke(path);
     });
 
     setDrawingCanvas(newDrawingCanvas);
     setBackgroundCanvas(newBackgroundCanvas);
-
-    console.log(newDrawingCanvas);
-    console.log(lastCenterPoint);
 
     const handleAltEvent = (keyUp: boolean) => {
       if (keyUp) {
@@ -217,7 +208,6 @@ const DrawingCanvas = ({
 
   useEffect(() => {
     if (!drawingCanvas) return;
-    console.log(`rgb${chroma(`#${color}`).rgb().join(",")}`, brush);
     drawingCanvas.freeDrawingBrush.color = `rgb(${chroma(`#${color}`).rgb().join(",")})`;
     drawingCanvas.freeDrawingBrush.width = BRUSHES[brush];
   }, [color, brush, drawingCanvas]);

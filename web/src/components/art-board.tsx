@@ -9,7 +9,7 @@ import { Redo, Undo } from "lucide-react";
 import React from "react";
 import useMeasure from "react-use-measure";
 
-export default function ArtBoard({ children }: { children: React.ReactNode }) {
+export default function ArtBoard() {
   const [selectedColor, setSelectedColor] = React.useState<HexCode>("00a243");
   const [selectedBrush, setSelectedBrush] = React.useState<BrushName>("2mm");
   const [containerRef, { width, height }] = useMeasure();
