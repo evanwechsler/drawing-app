@@ -64,11 +64,13 @@ const DrawingCanvas = ({
 
   useEffect(() => {
     if (!selectedCanvas) return;
+    const aspectRatio =
+      CANVASES[selectedCanvas].height / CANVASES[selectedCanvas].width;
     const newDrawingCanvas = new fabric.Canvas("drawingCanvas", {
       isDrawingMode: true,
       selection: false,
       width: width,
-      height: height,
+      height: width * aspectRatio,
     }) as MyCanvas;
     (newDrawingCanvas.freeDrawingBrush as MyBrush).limitedToCanvasSize = true;
 
@@ -77,9 +79,6 @@ const DrawingCanvas = ({
       width: newDrawingCanvas.getWidth(),
       height: newDrawingCanvas.getHeight(),
     }) as MyStaticCanvas;
-
-    const aspectRatio =
-      CANVASES[selectedCanvas].height / CANVASES[selectedCanvas].width;
 
     // Create a large rectangle that serves as the drawing area background
     const newBackgroundRect = new fabric.Rect({
@@ -90,7 +89,7 @@ const DrawingCanvas = ({
       evented: false,
       excludeFromExport: true,
       width: newDrawingCanvas.getWidth(),
-      height: newBackgroundCanvas.getWidth() * aspectRatio,
+      height: newBackgroundCanvas.getHeight(),
     });
     newDrawingCanvas.add(newBackgroundRect);
     newDrawingCanvas.add(...strokes);
@@ -160,6 +159,7 @@ const DrawingCanvas = ({
 
     newDrawingCanvas.on("path:created", function (options: fabric.IEvent) {
       const path = (options as object as { path: fabric.Path }).path;
+      path.selectable = false;
       addStroke(path);
     });
 
